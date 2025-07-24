@@ -6,13 +6,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "Movies")
 public class Movie {
     @Id
-    private String id;
+    private Integer id;
     private String title;
     private String overview;
     private String poster;
     private String lposter;
-    private double rent;
-    private double purchase;
+    private String rent;
+    private String purchase;
     private String featured;
+ 
+
+    public Movie() {
+        // No-args constructor required by Spring Data
+    }
 
 }

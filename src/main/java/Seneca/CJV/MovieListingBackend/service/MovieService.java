@@ -9,6 +9,7 @@ import Seneca.CJV.MovieListingBackend.repository.MovieRepository;
 
 @Service
 public class MovieService {
+
     private final MovieRepository movieRepository;
 
     public MovieService(MovieRepository movieRepository) {

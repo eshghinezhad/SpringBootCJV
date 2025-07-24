@@ -12,7 +12,7 @@ import Seneca.CJV.MovieListingBackend.model.Movie;
 import Seneca.CJV.MovieListingBackend.service.MovieService;
 
 @RestController
-@RequestMapping("/api/movies")
+@RequestMapping("/movies")
 public class MovieController {
 
     private final MovieService movieService;

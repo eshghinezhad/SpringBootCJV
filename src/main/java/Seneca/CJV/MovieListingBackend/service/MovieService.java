@@ -1,5 +1,7 @@
 package Seneca.CJV.MovieListingBackend.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import Seneca.CJV.MovieListingBackend.model.Movie;
@@ -15,5 +17,9 @@ public class MovieService {
 
     public Movie createMovie(Movie movie) {
         return movieRepository.save(movie);
+    }
+
+    public List<Movie> getAllMovies() {
+        return movieRepository.findAll();
     }
 }

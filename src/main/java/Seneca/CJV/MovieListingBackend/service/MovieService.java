@@ -20,9 +20,18 @@ public class MovieService {
         return movieRepository.save(movie);
     }
 
-    public List<Movie> getAllMovies() {
+    public List<Movie> getAllMoviesTvs() {
         return movieRepository.findAll();
     }
+
+    public List<Movie> getAllMovies() {
+        return movieRepository.findByTypeContainingIgnoreCase("movie");
+    }
+
+    public List<Movie> getAllTvShows() {
+        return movieRepository.findByTypeContainingIgnoreCase("tvShow");
+    }
+
     public List<Movie> getMovieByTitle(String title) {
         return movieRepository.findByTitleContainingIgnoreCase(title);
     }

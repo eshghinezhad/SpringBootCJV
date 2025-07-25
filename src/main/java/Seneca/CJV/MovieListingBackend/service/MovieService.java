@@ -35,4 +35,12 @@ public class MovieService {
     public List<Movie> getMovieByTitle(String title) {
         return movieRepository.findByTitleContainingIgnoreCase(title);
     }
+
+    public List<Movie> getFeatured(String type) {
+        return movieRepository.findByFeaturedNotNullAndTypeContainingIgnoreCase(type);
+    }
+
+    public Movie getMovieById(String id) {
+        return movieRepository.findById(id).orElse(null);
+    }
 }

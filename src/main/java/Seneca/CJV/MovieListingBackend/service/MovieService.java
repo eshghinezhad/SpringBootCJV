@@ -1,6 +1,7 @@
 package Seneca.CJV.MovieListingBackend.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,12 @@ public class MovieService {
         return movieRepository.findByFeaturedNotNullAndTypeContainingIgnoreCase(type);
     }
 
-    public Movie getMovieById(String id) {
-        return movieRepository.findById(id).orElse(null);
+    public Optional<Movie> getMovieById(String id) throws Exception {
+        Optional<Movie> movie = movieRepository.findById(id);
+        if (!movie.isPresent())
+        {
+            throw new Exception (" Movie with id" + id + " is not found ");
+        }
+        return movie;
     }
 }

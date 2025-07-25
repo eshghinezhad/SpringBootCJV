@@ -1,7 +1,9 @@
 package Seneca.CJV.MovieListingBackend.controller;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import Seneca.CJV.MovieListingBackend.CustomizedResponse;
 import Seneca.CJV.MovieListingBackend.model.Movie;
 import Seneca.CJV.MovieListingBackend.service.MovieService;
+
 
 @RestController
 @RequestMapping("/show")
@@ -61,13 +65,32 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getFeatured(type));
     }
 
-    // 7- retrieve a specific movie or tv show by ID
+    // 7- retrieve a specific movie or tv show by ID + provide validation logic
     @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovieById(@PathVariable String id) {
-        Movie movie = movieService.getMovieById(id);
-        if (movie == null) {
-            throw new IllegalArgumentException("Invalid movie ID: " + id);
+    // public ResponseEntity<Movie> getMovieById(@PathVariable String id)  {
+    //     CustomizedResponse customizedResponse = null;
+    //     try{
+    //         customizedResponse = new CustomizedResponse(" Movie with id " + id , Collections.singletonList(movieService.getMovieById(id)));
+    //     } catch (Exception e){
+    //         customizedResponse = new CustomizedResponse(e.getMessage(), null);
+
+    //         return new ResponseEntity(customizedResponse, HttpStatus.NOT_FOUND);
+    //     }
+    //     return new ResponseEntity(customizedResponse, HttpStatus.OK);
+    // }
+        
+    public ResponseEntity<CustomizedResponse<Movie>> getMovieById(@PathVariable String id) {
+        CustomizedResponse<Movie> customizedResponse;
+
+        try {
+            Movie movie = movieService.getMovieById(id)
+                                      .orElseThrow(() -> new IllegalArgumentException("Invalid movie ID: " + id));
+            customizedResponse = new CustomizedResponse<>("Movie with id " + id, Collections.singletonList(movie));
+        } catch (Exception e) {
+            customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
+            return new ResponseEntity<>(customizedResponse, HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok(movie);
+
+        return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
     }
 }

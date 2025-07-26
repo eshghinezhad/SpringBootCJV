@@ -48,4 +48,33 @@ public class MovieService {
         return movieRepository.findById(id)
                 .orElseThrow(() -> new Exception("Movie with id " + id + " is not found"));
     }
+
+    public Movie updateMovie(String id, Movie updatedMovie) throws Exception {
+        // Validate if the movie exists
+        Movie existingMovie = movieRepository.findById(id)
+                .orElseThrow(() -> new Exception("Movie with id " + id + " not found."));
+
+        Movie newMovie = new Movie(
+                existingMovie.id(), 
+                (updatedMovie.title() == null || updatedMovie.title().trim().isEmpty()) ? existingMovie.title() : updatedMovie.title(),
+                (updatedMovie.type() == null || updatedMovie.type().trim().isEmpty()) ? existingMovie.type() : updatedMovie.type(),
+                (updatedMovie.featured() == null || updatedMovie.featured().trim().isEmpty()) ? existingMovie.featured() : updatedMovie.featured(),
+                (updatedMovie.overview() == null || updatedMovie.overview().trim().isEmpty()) ? existingMovie.overview() : updatedMovie.overview(),
+                (updatedMovie.poster() == null || updatedMovie.poster().trim().isEmpty()) ? existingMovie.poster() : updatedMovie.poster(),
+                (updatedMovie.lposter() == null || updatedMovie.lposter().trim().isEmpty()) ? existingMovie.lposter() : updatedMovie.lposter(),
+                (updatedMovie.rent() == null || updatedMovie.rent().trim().isEmpty()) ? existingMovie.rent() : updatedMovie.rent(),
+                (updatedMovie.purchase() == null || updatedMovie.purchase().trim().isEmpty()) ? existingMovie.purchase() : updatedMovie.purchase()
+        );
+        return movieRepository.save(newMovie);
+    }
+
+    public void deleteMovieById(String id) throws Exception {
+        // Validate if the movie exists
+        Movie existingMovie = movieRepository.findById(id)
+                .orElseThrow(() -> new Exception("Movie with id " + id + " not found."));
+
+        // Delete the movie
+        movieRepository.delete(existingMovie);
+    }
 }
+

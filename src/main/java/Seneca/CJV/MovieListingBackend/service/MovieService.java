@@ -1,7 +1,6 @@
 package Seneca.CJV.MovieListingBackend.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -33,20 +32,20 @@ public class MovieService {
         return movieRepository.findByTypeContainingIgnoreCase("tvShow");
     }
 
-    public List<Movie> getMovieByTitle(String title) {
-        return movieRepository.findByTitleContainingIgnoreCase(title);
+    public List<Movie> getMoviesByTitle(String title) throws Exception {
+        List<Movie> movies = movieRepository.findByTitleContainingIgnoreCase(title);
+        if (movies.isEmpty()) {
+            throw new Exception("No movies found with title: " + title);
+        }
+        return movies;
     }
 
     public List<Movie> getFeatured(String type) {
         return movieRepository.findByFeaturedNotNullAndTypeContainingIgnoreCase(type);
     }
 
-    public Optional<Movie> getMovieById(String id) throws Exception {
-        Optional<Movie> movie = movieRepository.findById(id);
-        if (!movie.isPresent())
-        {
-            throw new Exception (" Movie with id" + id + " is not found ");
-        }
-        return movie;
+    public Movie getMovieById(String id) throws Exception {
+        return movieRepository.findById(id)
+                .orElseThrow(() -> new Exception("Movie with id " + id + " is not found"));
     }
 }

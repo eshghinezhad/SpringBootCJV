@@ -51,11 +51,20 @@ public class MovieController {
     }
     
     // 4- retrieves a list of movies and/or tv shows that contains the title
-    //    specified in the request parameter 
+    //    specified in the request parameter + provide validation logic
     @GetMapping("/search")
-    public ResponseEntity<List<Movie>> getMovieByTitle(@RequestParam String title) {
-        List<Movie> movies = movieService.getMovieByTitle(title);
-        return ResponseEntity.ok(movies != null ? movies : List.of());
+    public ResponseEntity<CustomizedResponse<Movie>> getMoviesByTitle(@RequestParam String title) {
+        CustomizedResponse<Movie> customizedResponse;
+
+        try {
+            List<Movie> movies = movieService.getMoviesByTitle(title);
+            customizedResponse = new CustomizedResponse<>("Movies with title containing: " + title, movies);
+        } catch (Exception e) {
+            customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
+            return new ResponseEntity<>(customizedResponse, HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
     }
 
     // 5-6- retrieves a list of featured movies or tv shows based on the type
@@ -67,24 +76,11 @@ public class MovieController {
 
     // 7- retrieve a specific movie or tv show by ID + provide validation logic
     @GetMapping("/{id}")
-    // public ResponseEntity<Movie> getMovieById(@PathVariable String id)  {
-    //     CustomizedResponse customizedResponse = null;
-    //     try{
-    //         customizedResponse = new CustomizedResponse(" Movie with id " + id , Collections.singletonList(movieService.getMovieById(id)));
-    //     } catch (Exception e){
-    //         customizedResponse = new CustomizedResponse(e.getMessage(), null);
-
-    //         return new ResponseEntity(customizedResponse, HttpStatus.NOT_FOUND);
-    //     }
-    //     return new ResponseEntity(customizedResponse, HttpStatus.OK);
-    // }
-        
     public ResponseEntity<CustomizedResponse<Movie>> getMovieById(@PathVariable String id) {
         CustomizedResponse<Movie> customizedResponse;
 
         try {
-            Movie movie = movieService.getMovieById(id)
-                                      .orElseThrow(() -> new IllegalArgumentException("Invalid movie ID: " + id));
+            Movie movie = movieService.getMovieById(id);
             customizedResponse = new CustomizedResponse<>("Movie with id " + id, Collections.singletonList(movie));
         } catch (Exception e) {
             customizedResponse = new CustomizedResponse<>(e.getMessage(), null);

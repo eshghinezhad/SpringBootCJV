@@ -3,6 +3,7 @@ package Seneca.CJV.MovieListingBackend.controller;
 import java.util.Collections;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,31 +25,29 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)  //sign up
+    public ResponseEntity<CustomizedResponse<User>> registerNewUser(@RequestBody User newUser) {
 
-    @PostMapping("/register")
-    public User registerUser(@RequestBody User user) {
-        return userService.registerNewUser(user);
+        CustomizedResponse<User> customizedResponse ;
+        try{
+            User registeredUser = userService.registerNewUser(newUser);
+            customizedResponse = new CustomizedResponse<>("User registered successfully", Collections.singletonList(registeredUser));
+            
+        } catch (Exception e){
+            customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
+            return new ResponseEntity<>(customizedResponse, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
     }
-
     @GetMapping("/{id}")
-    // public ResponseEntity<User> getUser(@PathVariable("id") String id) {
-    //     CustomizedResponse customizedResponse = null;
-    //     try{
-    //         customizedResponse = new CustomizedResponse(" Get User with id " + id , Collections.singletonList(userService.getUserById(id)));
-    //     } catch (Exception e){
-    //         customizedResponse = new CustomizedResponse(e.getMessage(), null);
-    //         return new ResponseEntity(customizedResponse, HttpStatus.NOT_FOUND);
-    //     }
-    //     return new ResponseEntity(customizedResponse, HttpStatus.OK);
-    // }
         public ResponseEntity<CustomizedResponse<User>> getUserById(@PathVariable("id") String id) {
         CustomizedResponse<User> customizedResponse ;
         try{
             User user = userService.getUserById(id).orElseThrow(() -> new Exception("User not found"));
-            customizedResponse = new CustomizedResponse<>(" Get User with id " + id , Collections.singletonList(user));
+            customizedResponse = new CustomizedResponse<>("User with id " + id + " retrieved successfully", Collections.singletonList(user));
         } catch (Exception e){
             customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
-            return new ResponseEntity<>(customizedResponse, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(customizedResponse, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
     }

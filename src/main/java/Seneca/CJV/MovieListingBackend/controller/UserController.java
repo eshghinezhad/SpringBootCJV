@@ -57,6 +57,18 @@ public class UserController {
     }
 
 
-    // Endpoint that will authenticate a user - Sign in
+    // Endpoint that will authenticate a user - Login
+    @PostMapping("/login")
+    public ResponseEntity<CustomizedResponse<User>> loginUser(@RequestBody User loginUser) {
+        CustomizedResponse<User> customizedResponse;
+        try {
+            User login = userService.loginUser(loginUser);
+            customizedResponse = new CustomizedResponse<>("User logged in successfully", Collections.singletonList(login));
+        } catch (Exception e) {
+            customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
+            return new ResponseEntity<>(customizedResponse, HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
+    }
 
 }

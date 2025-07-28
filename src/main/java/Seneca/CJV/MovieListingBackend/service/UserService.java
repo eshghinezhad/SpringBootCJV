@@ -17,14 +17,14 @@ public class UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
+    // -------------------- Register a new User --------------------
     public User registerNewUser(User user) throws Exception {
 
         boolean exists = userRepository.existsByEmail(user.getEmail());
         if (exists) {
             throw new Exception("User with email: " + user.getEmail() + " already exists");
         }
-// validate user data******************
+        // validate user data******************
         if (user.getFirstName() == null || user.getFirstName().isEmpty()) {
             throw new Exception("First name is required");
         }
@@ -41,7 +41,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
-    
+    // -------------------- Retrieves a specific User by ID--------------------
     public Optional<User> getUserById(String id) throws Exception {
        Optional<User> user = userRepository.findById(id);
         if(!user.isPresent()) {
@@ -49,5 +49,19 @@ public class UserService {
         }
         return user;
     }
-    
+
+    // -------------------- Authenticate a User --------------------
+    public User loginUser(String email, String password) throws Exception {
+
+        User existingUser = userRepository.findByEmail(email);
+        if (existingUser == null) {
+            throw new Exception("Invalid email or password");
+        }
+
+        if (!passwordEncoder.matches(password, existingUser.getPassword())) {
+            throw new Exception("Invalid email or password");
+        }
+
+        return existingUser;
+    }
 }

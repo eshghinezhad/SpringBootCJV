@@ -25,10 +25,12 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)  //sign up
+
+    // Endpoint that will allow a user to register - sign up
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)  
     public ResponseEntity<CustomizedResponse<User>> registerNewUser(@RequestBody User newUser) {
 
-        CustomizedResponse<User> customizedResponse ;
+        CustomizedResponse<User> customizedResponse;
         try{
             User registeredUser = userService.registerNewUser(newUser);
             customizedResponse = new CustomizedResponse<>("User registered successfully", Collections.singletonList(registeredUser));
@@ -39,10 +41,12 @@ public class UserController {
         }
         return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
     }
+
+    // Endpoint to retrieves a specific User by ID
     @GetMapping("/{id}")
-        public ResponseEntity<CustomizedResponse<User>> getUserById(@PathVariable("id") String id) {
-        CustomizedResponse<User> customizedResponse ;
-        try{
+    public ResponseEntity<CustomizedResponse<User>> getUserById(@PathVariable("id") String id) {
+        CustomizedResponse<User> customizedResponse;
+        try {
             User user = userService.getUserById(id).orElseThrow(() -> new Exception("User not found"));
             customizedResponse = new CustomizedResponse<>("User with id " + id + " retrieved successfully", Collections.singletonList(user));
         } catch (Exception e){
@@ -51,4 +55,8 @@ public class UserController {
         }
         return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
     }
+
+
+    // Endpoint that will authenticate a user - Sign in
+
 }

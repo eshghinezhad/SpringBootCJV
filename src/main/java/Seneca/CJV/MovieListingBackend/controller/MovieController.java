@@ -88,24 +88,21 @@ public class MovieController {
         return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
     }
 
+    // 8- Update and change an existing movie in the database by specific ID + provide validation logic
     @PutMapping("/{id}")
-    public ResponseEntity<CustomizedResponse<Movie>> updateMovie(
-            @PathVariable String id,
-            @RequestBody Movie updatedMovie) {
+    public ResponseEntity<CustomizedResponse<Movie>> updateMovie(@PathVariable String id, @RequestBody Movie updatedMovie) {
         CustomizedResponse<Movie> customizedResponse;
-
         try {
-            // Validate and update the movie
             Movie movie = movieService.updateMovie(id, updatedMovie);
             customizedResponse = new CustomizedResponse<>("Movie with id " + id + " has been updated.", Collections.singletonList(movie));
         } catch (Exception e) {
             customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
             return new ResponseEntity<>(customizedResponse, HttpStatus.BAD_REQUEST);
         }
-
         return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
     }
 
+    // 9- Delete an existing movie or tv show by specific ID + provide validation logic
     @DeleteMapping("/{id}")
     public ResponseEntity<CustomizedResponse<Void>> deleteMovieById(@PathVariable String id) {
         CustomizedResponse<Void> customizedResponse;
@@ -117,7 +114,6 @@ public class MovieController {
             customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
             return new ResponseEntity<>(customizedResponse, HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
     }
 }

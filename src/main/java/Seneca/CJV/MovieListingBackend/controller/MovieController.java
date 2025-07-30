@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import Seneca.CJV.MovieListingBackend.service.MovieService;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000") 
 @RequestMapping("/show")
 public class MovieController {
 
@@ -29,46 +31,60 @@ public class MovieController {
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
     }
+
     // 1- create movies/tv shows to be added to the database
     @PostMapping
-    public  Movie createMovie(@RequestBody Movie movie) {
-        return movieService.createMovie(movie);
+    public ResponseEntity<Movie> createMovie(@RequestBody Movie movie) {
+        Movie addedMovie = movieService.createMovie(movie);
+        if (addedMovie == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedMovie);
+
+
     }
+    
     //  retrieves all the movies and tv shows in the database
     @GetMapping
     public ResponseEntity<List<Movie>> getAllMoviesTvs() {
-        List<Movie> movies = movieService.getAllMoviesTvs();
-        return ResponseEntity.ok(movies != null ? movies : List.of());
+        List<Movie> allMoviesTvs = movieService.getAllMoviesTvs();
+        if (allMoviesTvs.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(allMoviesTvs);
     }
+   
     // 2- retrieves all the movies in the database
     @GetMapping("/movie")
     public ResponseEntity<List<Movie>> getAllMovies() {
-        return ResponseEntity.ok(movieService.getAllMovies());
+        List<Movie> allMovies = movieService.getAllMovies();
+        if (allMovies.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(allMovies);
     }
 
     // 3- retrieves all the tv shows in the database
     @GetMapping("/tv")
     public ResponseEntity<List<Movie>> getAllTvShows() {
-        return ResponseEntity.ok(movieService.getAllTvShows());
+        List<Movie> allTvShows = movieService.getAllTvShows();
+        if (allTvShows.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(allTvShows);
     }
     
-    // 4- retrieves a list of movies and/or tv shows that contains the title
-    //    specified in the request parameter + provide validation logic
+    // 4- retrieves a list of movies and/or tv shows that contains the specified title
     @GetMapping("/search")
-    public ResponseEntity<CustomizedResponse<Movie>> getMoviesByTitle(@RequestParam String title) {
-        CustomizedResponse<Movie> customizedResponse;
+    public ResponseEntity<List<Movie>> getMoviesByTitle(@RequestParam String title) {
         try {
-            List<Movie> movies = movieService.getMoviesByTitle(title);
-            customizedResponse = new CustomizedResponse<>("Movies with title containing: " + title, movies);
+            return ResponseEntity.ok(movieService.getMoviesByTitle(title));
         } catch (Exception e) {
-            customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
-            return new ResponseEntity<>(customizedResponse, HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
     }
 
-    // 5-6- retrieves a list of featured movies or tv shows based on the type
-    //    specified in the request parameter
+    // 5-6- retrieves a list of featured movies or tv shows based on the specified type
     @GetMapping("/featured")
     public ResponseEntity<List<Movie>> getFeatured(@RequestParam  String type) {
         return ResponseEntity.ok(movieService.getFeatured(type));
@@ -80,7 +96,7 @@ public class MovieController {
         CustomizedResponse<Movie> customizedResponse;
         try {
             Movie movie = movieService.getMovieById(id);
-            customizedResponse = new CustomizedResponse<>("Movie with id " + id, Collections.singletonList(movie));
+            customizedResponse = new CustomizedResponse<>("Movie with id " + id + " has been retrieved successfully.", Collections.singletonList(movie));
         } catch (Exception e) {
             customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
             return new ResponseEntity<>(customizedResponse, HttpStatus.NOT_FOUND);
@@ -94,7 +110,7 @@ public class MovieController {
         CustomizedResponse<Movie> customizedResponse;
         try {
             Movie movie = movieService.updateMovie(id, updatedMovie);
-            customizedResponse = new CustomizedResponse<>("Movie with id " + id + " has been updated.", Collections.singletonList(movie));
+            customizedResponse = new CustomizedResponse<>("Movie with id " + id + " has been updated successfully.", Collections.singletonList(movie));
         } catch (Exception e) {
             customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
             return new ResponseEntity<>(customizedResponse, HttpStatus.BAD_REQUEST);
@@ -109,7 +125,7 @@ public class MovieController {
 
         try {
             movieService.deleteMovieById(id);
-            customizedResponse = new CustomizedResponse<>("Movie with id " + id + " has been deleted.", null);
+            customizedResponse = new CustomizedResponse<>("Movie with id " + id + " has been deleted successfully.", null);
         } catch (Exception e) {
             customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
             return new ResponseEntity<>(customizedResponse, HttpStatus.NOT_FOUND);

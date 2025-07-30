@@ -52,7 +52,7 @@ public class MovieService {
     public Movie updateMovie(String id, Movie updatedMovie) throws Exception {
         // Validate if the movie exists
         Movie existingMovie = movieRepository.findById(id)
-                .orElseThrow(() -> new Exception("Movie with id " + id + " not found."));
+                .orElseThrow(() -> new Exception("Movie with id " + id + " is not found."));
 
         Movie newMovie = new Movie(
                 existingMovie.id(), 

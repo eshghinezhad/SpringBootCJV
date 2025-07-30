@@ -76,11 +76,17 @@ public class MovieController {
     
     // 4- retrieves a list of movies and/or tv shows that contains the specified title
     @GetMapping("/search")
-    public ResponseEntity<List<Movie>> getMoviesByTitle(@RequestParam String title) {
+    public ResponseEntity<?> getMoviesByTitle(@RequestParam String title) {
+        // Validate the title parameter
+        if (title == null || title.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Title cannot be null or empty");
+        }
         try {
-            return ResponseEntity.ok(movieService.getMoviesByTitle(title));
+            List<Movie> movies = movieService.getMoviesByTitle(title);
+            return ResponseEntity.ok(movies); 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            CustomizedResponse<List<Movie>> customizedResponse = new CustomizedResponse<>(e.getMessage(), null);
+            return new ResponseEntity<>(customizedResponse, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -122,7 +128,6 @@ public class MovieController {
     @DeleteMapping("/{id}")
     public ResponseEntity<CustomizedResponse<Void>> deleteMovieById(@PathVariable String id) {
         CustomizedResponse<Void> customizedResponse;
-
         try {
             movieService.deleteMovieById(id);
             customizedResponse = new CustomizedResponse<>("Movie with id " + id + " has been deleted successfully.", null);

@@ -36,26 +36,15 @@ public class UserService {
         }
         return user;
     }
-
     // -------------------- Authenticate a User --------------------
-    public User loginUser(String email, String password) throws Exception {
-        // if (email == null || email.trim().isEmpty()) {
-        //     throw new RuntimeException("Email is required");
-        // }
-        
-        // if (password == null || password.trim().isEmpty()) {
-        //     throw new RuntimeException("Password is required");
-        // }
 
-        User existingUser = userRepository.findByEmail(email);
-        if (existingUser == null) {
-            throw new Exception("Invalid email or password");
+    public Optional<User> getUserByEmail(String Email) throws Exception{
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(Email));
+        if(!user.isPresent()) {
+            throw new Exception("user with Email:"+Email+" not found");
         }
-
-        if (!passwordEncoder.matches(password, existingUser.getPassword())) {
-            throw new Exception("Invalid email or password");
-        }
-
-        return existingUser;
+        return user;
     }
+
+   
 }

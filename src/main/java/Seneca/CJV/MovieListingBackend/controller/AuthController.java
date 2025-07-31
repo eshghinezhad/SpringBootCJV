@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import Seneca.CJV.MovieListingBackend.CustomizedResponse;
@@ -20,6 +21,7 @@ import Seneca.CJV.MovieListingBackend.service.UserService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/auth")
 public class AuthController
 
 {
@@ -28,7 +30,7 @@ public class AuthController
 
     @Autowired
     private UserService userService;
-    @PostMapping(value = "/auth", consumes = {
+    @PostMapping(value = "/login", consumes = {
             MediaType.APPLICATION_JSON_VALUE
     })
     public ResponseEntity<?> login(@RequestBody User user)

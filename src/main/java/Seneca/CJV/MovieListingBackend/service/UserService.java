@@ -1,6 +1,10 @@
 package Seneca.CJV.MovieListingBackend.service;
+import java.util.ArrayList;
 import java.util.Optional;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +12,7 @@ import Seneca.CJV.MovieListingBackend.model.User;
 import Seneca.CJV.MovieListingBackend.repository.UserRepository;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -17,6 +21,18 @@ public class UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String Email) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByEmail(Email);
+        if (!user.isPresent()){
+            throw new UsernameNotFoundException("User with email: " + Email + " not found");
+        }
+        String userE = user.get().getEmail();
+        String userP = user.get().getPassword();
+        return new org.springframework.security.core.userdetails.User(userE, userP, new ArrayList<>());
+    }
+
     // -------------------- Register a new User --------------------
     public User registerNewUser(User user) throws Exception {
 
@@ -36,15 +52,22 @@ public class UserService {
         }
         return user;
     }
-    // -------------------- Authenticate a User --------------------
 
     public Optional<User> getUserByEmail(String Email) throws Exception{
-        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(Email));
+        Optional<User> user = userRepository.findByEmail(Email);
         if(!user.isPresent()) {
             throw new Exception("user with Email:"+Email+" not found");
         }
         return user;
     }
-
+    // public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException{
+    //     Optional<User> user = userRepository.findByEmail(email);
+    //     if (!user.isPresent()){
+    //         throw new UsernameNotFoundException("User with email: " +email+" not found");
+    //     }
+    //     String userE = user.get().getEmail();
+    //     String userP = user.get().getPassword();
+    //     return new org.springframework.security.core.userdetails.User(userE, userP, new ArrayList<>());
+    // }
    
 }

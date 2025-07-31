@@ -54,16 +54,19 @@ public class MovieService {
         Movie existingMovie = movieRepository.findById(id)
                 .orElseThrow(() -> new Exception("Movie with id " + id + " is not found."));
 
+        // Since Movie is a record (immutable), you cannot use setters.
+        // Instead, create a new Movie instance with updated fields.
         Movie newMovie = new Movie(
-                existingMovie.id(), 
-                updatedMovie.title(),
-                updatedMovie.type(),
-                updatedMovie.overview(),
-                updatedMovie.poster(),
-                updatedMovie.lposter(),
-                updatedMovie.rent(),
-                updatedMovie.purchase(),
-                updatedMovie.featured()
+            existingMovie.id(),
+            updatedMovie.title() != null && !updatedMovie.title().trim().isEmpty() ? updatedMovie.title() : existingMovie.title(),
+            updatedMovie.type() != null && !updatedMovie.type().trim().isEmpty() ? updatedMovie.type() : existingMovie.type(),
+            updatedMovie.overview() != null && !updatedMovie.overview().trim().isEmpty() ? updatedMovie.overview() : existingMovie.overview(),
+            updatedMovie.poster() != null && !updatedMovie.poster().trim().isEmpty() ? updatedMovie.poster() : existingMovie.poster(),
+            updatedMovie.lposter() != null && !updatedMovie.lposter().trim().isEmpty() ? updatedMovie.lposter() : existingMovie.lposter(),
+            updatedMovie.rent() != null && !updatedMovie.rent().trim().isEmpty() ? updatedMovie.rent() : existingMovie.rent(),
+            updatedMovie.purchase() != null && !updatedMovie.purchase().trim().isEmpty() ? updatedMovie.purchase() : existingMovie.purchase(),
+            updatedMovie.featured()
+
         );
         return movieRepository.save(newMovie);
     }

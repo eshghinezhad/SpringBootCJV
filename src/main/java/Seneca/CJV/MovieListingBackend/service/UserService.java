@@ -39,13 +39,13 @@ public class UserService {
 
     // -------------------- Authenticate a User --------------------
     public User loginUser(String email, String password) throws Exception {
-        if (email == null || email.trim().isEmpty()) {
-            throw new RuntimeException("Email is required");
-        }
+        // if (email == null || email.trim().isEmpty()) {
+        //     throw new RuntimeException("Email is required");
+        // }
         
-        if (password == null || password.trim().isEmpty()) {
-            throw new RuntimeException("Password is required");
-        }
+        // if (password == null || password.trim().isEmpty()) {
+        //     throw new RuntimeException("Password is required");
+        // }
 
         User existingUser = userRepository.findByEmail(email);
         if (existingUser == null) {

@@ -63,7 +63,7 @@ public class UserController {
 
     // Endpoint that will authenticate a user - Login
     @PostMapping("/login")
-    public ResponseEntity<CustomizedResponse<User>> loginUser(@RequestBody User loginUser) {
+    public ResponseEntity<CustomizedResponse<User>> loginUser(@Valid @RequestBody User loginUser) {
         CustomizedResponse<User> customizedResponse;
         try {
             User login = userService.loginUser(loginUser.getEmail(), loginUser.getPassword());

@@ -30,7 +30,6 @@ public class UserController {
     }
 
     // Endpoint that will allow a user to register - sign up
-    // @PostMapping( "/register")  
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)  
     public ResponseEntity<CustomizedResponse<User>> registerNewUser(@Valid @RequestBody User newUser) {
 
@@ -59,9 +58,5 @@ public class UserController {
         }
         return new ResponseEntity<>(customizedResponse, HttpStatus.OK);
     }
-
-
-    // Endpoint that will authenticate a user - Login
-   
 
 }

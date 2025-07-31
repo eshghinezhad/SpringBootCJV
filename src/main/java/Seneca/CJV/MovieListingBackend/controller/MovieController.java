@@ -41,8 +41,6 @@ public class MovieController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(addedMovie);
-
-
     }
     
     //  retrieves all the movies and tv shows in the database
@@ -113,7 +111,7 @@ public class MovieController {
 
     // 8- Update and change an existing movie in the database by specific ID + provide validation logic
     @PutMapping("/{id}")
-    public ResponseEntity<CustomizedResponse<Movie>> updateMovie(@PathVariable String id, @RequestBody Movie updatedMovie) {
+    public ResponseEntity<CustomizedResponse<Movie>> updateMovie(@Valid @PathVariable String id, @RequestBody Movie updatedMovie) {
         CustomizedResponse<Movie> customizedResponse;
         try {
             Movie movie = movieService.updateMovie(id, updatedMovie);

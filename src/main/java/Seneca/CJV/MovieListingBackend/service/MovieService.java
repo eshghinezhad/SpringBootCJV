@@ -56,14 +56,14 @@ public class MovieService {
 
         Movie newMovie = new Movie(
                 existingMovie.id(), 
-                (updatedMovie.title() == null || updatedMovie.title().trim().isEmpty()) ? existingMovie.title() : updatedMovie.title(),
-                (updatedMovie.type() == null || updatedMovie.type().trim().isEmpty()) ? existingMovie.type() : updatedMovie.type(),
-                (updatedMovie.featured() == null || updatedMovie.featured().trim().isEmpty()) ? existingMovie.featured() : updatedMovie.featured(),
-                (updatedMovie.overview() == null || updatedMovie.overview().trim().isEmpty()) ? existingMovie.overview() : updatedMovie.overview(),
-                (updatedMovie.poster() == null || updatedMovie.poster().trim().isEmpty()) ? existingMovie.poster() : updatedMovie.poster(),
-                (updatedMovie.lposter() == null || updatedMovie.lposter().trim().isEmpty()) ? existingMovie.lposter() : updatedMovie.lposter(),
-                (updatedMovie.rent() == null || updatedMovie.rent().trim().isEmpty()) ? existingMovie.rent() : updatedMovie.rent(),
-                (updatedMovie.purchase() == null || updatedMovie.purchase().trim().isEmpty()) ? existingMovie.purchase() : updatedMovie.purchase()
+                updatedMovie.title(),
+                updatedMovie.type(),
+                updatedMovie.overview(),
+                updatedMovie.poster(),
+                updatedMovie.lposter(),
+                updatedMovie.rent(),
+                updatedMovie.purchase(),
+                updatedMovie.featured()
         );
         return movieRepository.save(newMovie);
     }
@@ -78,3 +78,11 @@ public class MovieService {
     }
 }
 
+//                  (updatedMovie.title() == null || updatedMovie.title().trim().isEmpty()) ? existingMovie.title() : updatedMovie.title(),
+//                 (updatedMovie.type() == null || updatedMovie.type().trim().isEmpty()) ? existingMovie.type() : updatedMovie.type(),
+//                 (updatedMovie.overview() == null || updatedMovie.overview().trim().isEmpty()) ? existingMovie.overview() : updatedMovie.overview(),
+//                 (updatedMovie.poster() == null || updatedMovie.poster().trim().isEmpty()) ? existingMovie.poster() : updatedMovie.poster(),
+//                 (updatedMovie.lposter() == null || updatedMovie.lposter().trim().isEmpty()) ? existingMovie.lposter() : updatedMovie.lposter(),
+//                 (updatedMovie.rent() == null || updatedMovie.rent().trim().isEmpty()) ? existingMovie.rent() : updatedMovie.rent(),
+//                 (updatedMovie.purchase() == null || updatedMovie.purchase().trim().isEmpty()) ? existingMovie.purchase() : updatedMovie.purchase(),
+//                 (updatedMovie.featured() == null || updatedMovie.featured().trim().isEmpty()) ? existingMovie.featured() : updatedMovie.featured()

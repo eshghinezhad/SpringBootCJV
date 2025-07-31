@@ -24,19 +24,6 @@ public class UserService {
         if (exists) {
             throw new Exception("User with email: " + user.getEmail() + " already registered");
         }
-        // validate user data******************
-        if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {
-            throw new Exception("First name is required");
-        }
-        if (user.getLastName() == null || user.getLastName().trim().isEmpty()) {
-            throw new Exception("Last name is required");
-        }
-        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
-            throw new Exception("Email is required");
-        }
-        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
-            throw new Exception("Password is required");
-        }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);

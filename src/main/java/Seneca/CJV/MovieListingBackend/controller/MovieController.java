@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import Seneca.CJV.MovieListingBackend.CustomizedResponse;
 import Seneca.CJV.MovieListingBackend.model.Movie;
 import Seneca.CJV.MovieListingBackend.service.MovieService;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -34,7 +35,7 @@ public class MovieController {
 
     // 1- create movies/tv shows to be added to the database
     @PostMapping
-    public ResponseEntity<Movie> createMovie(@RequestBody Movie movie) {
+    public ResponseEntity<Movie> createMovie(@Valid @RequestBody Movie movie) {
         Movie addedMovie = movieService.createMovie(movie);
         if (addedMovie == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

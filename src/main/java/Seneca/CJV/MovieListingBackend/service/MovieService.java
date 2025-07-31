@@ -35,7 +35,7 @@ public class MovieService {
     public List<Movie> getMoviesByTitle(String title) throws Exception {
         List<Movie> movies = movieRepository.findByTitleContainingIgnoreCase(title);
         if (movies.isEmpty()) {
-            throw new Exception("No movies found with title: " + title);
+            throw new Exception("Movie containing title " + title + " is not found");
         }
         return movies;
     }
@@ -71,7 +71,7 @@ public class MovieService {
     public void deleteMovieById(String id) throws Exception {
         // Validate if the movie exists
         Movie existingMovie = movieRepository.findById(id)
-                .orElseThrow(() -> new Exception("Movie with id " + id + " not found."));
+                .orElseThrow(() -> new Exception("Movie with id " + id + " is not found."));
 
         // Delete the movie
         movieRepository.delete(existingMovie);

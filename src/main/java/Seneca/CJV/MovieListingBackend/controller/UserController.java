@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import Seneca.CJV.MovieListingBackend.CustomizedResponse;
 import Seneca.CJV.MovieListingBackend.model.User;
 import Seneca.CJV.MovieListingBackend.service.UserService;
+import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000") 
@@ -31,7 +32,7 @@ public class UserController {
     // Endpoint that will allow a user to register - sign up
     // @PostMapping( "/register")  
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)  
-    public ResponseEntity<CustomizedResponse<User>> registerNewUser(@RequestBody User newUser) {
+    public ResponseEntity<CustomizedResponse<User>> registerNewUser(@Valid @RequestBody User newUser) {
 
         CustomizedResponse<User> customizedResponse;
         try{

@@ -40,8 +40,8 @@ public class MovieService {
         return movies;
     }
 
-    public List<Movie> getFeatured(String type) {
-        return movieRepository.findByFeaturedNotNullAndTypeContainingIgnoreCase(type);
+    public List<Movie> getFeatured(String featured) {
+        return movieRepository.findByFeaturedContainingIgnoreCase(featured);
     }
 
     public Movie getMovieById(String id) throws Exception {

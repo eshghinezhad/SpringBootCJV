@@ -90,9 +90,9 @@ public class MovieController {
     }
 
     // 5-6- retrieves a list of featured movies or tv shows based on the specified type
-    @GetMapping("/featured")
-    public ResponseEntity<List<Movie>> getFeatured(@RequestParam  String type) {
-        return ResponseEntity.ok(movieService.getFeatured(type));
+    @GetMapping("/find")
+    public ResponseEntity<List<Movie>> getFeatured(@RequestParam String featured) {
+        return ResponseEntity.ok(movieService.getFeatured(featured));
     }
 
     // 7- retrieve a specific movie or tv show by ID + provide validation logic
